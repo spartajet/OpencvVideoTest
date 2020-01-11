@@ -1,7 +1,3 @@
-ï»¿// OpencvVideoTest.cpp: å®šä¹‰åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
-//
-
-#include "OpencvVideoTest.h"
 #include "opencv2/core.hpp"
 #include <opencv2/core/types_c.h>
 #include <opencv2/highgui/highgui.hpp>
@@ -13,7 +9,6 @@ using namespace cv;
 
 int main()
 {
-	
 	VideoCapture cap(0);
 
 	if (!cap.isOpened())
@@ -24,15 +19,22 @@ int main()
 
 	Mat frame;
 
-	//è®¾ç½®ä¿å­˜çš„è§†é¢‘å¸§æ•°ç›®
+	//ÉèÖÃ±£´æµÄÊÓÆµÖ¡ÊıÄ¿
 	int frame_num = 100;
-	//ä¿å­˜è§†é¢‘çš„è·¯å¾„
+	//±£´æÊÓÆµµÄÂ·¾¶
 	const string output_video_path = "test.avi";
-	//è·å–å½“å‰æ‘„åƒå¤´çš„è§†é¢‘ä¿¡æ¯
+	//»ñÈ¡µ±Ç°ÉãÏñÍ·µÄÊÓÆµĞÅÏ¢
 	const cv::Size s_wh = cv::Size(static_cast<int>(cap.get(CAP_PROP_FRAME_WIDTH)),
-	                              static_cast<int>(cap.get(CAP_PROP_FRAME_HEIGHT)));
+		static_cast<int>(cap.get(CAP_PROP_FRAME_HEIGHT)));
 	VideoWriter output_video;
-	output_video.open(output_video_path, output_video.fourcc('M', 'P', '4', '2'), 25.0, s_wh,false);
+	output_video.open(output_video_path, output_video.fourcc('M', 'P', '4', '2'), 25.0, s_wh, false);
+	
+	if (cap.isOpened())
+	{
+		cap >> frame;
+	}
+	cap.release();
+	
 
 	while (cap.isOpened() && frame_num > 0)
 	{
@@ -43,7 +45,7 @@ int main()
 		frame.convertTo(frame, CV_16UC3);
 		normalize(frame, frame, 0, 256 * 256, NORM_MINMAX);
 		cvtColor(frame, frame, CV_RGB2GRAY);
-		output_video << frame; 
+		output_video << frame;
 		frame_num--;
 
 		imshow("img", frame);
